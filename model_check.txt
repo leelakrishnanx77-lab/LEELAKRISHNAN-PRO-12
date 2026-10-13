@@ -1,26 +1,30 @@
-LAB PROGRAM 12 - ER DIAGRAM CHECKLIST
+CREATE DATABASE CollegeDB;
+Use CollegeDB;
 
-Student Entity: YES
-Course Entity: YES
-Faculty Entity: YES
-Department Entity: YES
-
-Student Primary Key: StudentID
-Course Primary Key: CourseID
-Faculty Primary Key: FacultyID
-Department Primary Key: DepartmentID
-
-Department-Student Relationship: YES
-Department-Student Cardinality: 1:N
-
-Faculty-Course Relationship: YES
-Faculty-Course Cardinality: 1:N
-
-Student-Course Relationship: YES
-Student-Course Cardinality: M:N
-
-Associative Entity for Student-Course: Enrollment
-
-One-to-One Relationship: NOT REQUIRED
-
-Visual Diagram Created in MySQL Workbench: YES
+CREATE TABLE Department ( Department_ID INT PRIMARY KEY, Department_Name VARCHAR(100) NOT
+NULL);
+CREATE TABLE Student (Student_ID INT PRIMARY KEY, Student_Name VARCHAR(100) NOT NULL,
+Email VARCHAR(100), Phone VARCHAR(15), Department_ID INT, CONSTRAINT
+fk_student_department FOREIGN KEY (Department_ID) REFERENCES Department(Department_ID)
+);
+CREATE TABLE Faculty ( Faculty_ID INT PRIMARY KEY, Faculty_Name VARCHAR(100) NOT NULL,
+Email VARCHAR(100), Department_ID INT, CONSTRAINT fk_faculty_department FOREIGN KEY
+(Department_ID) REFERENCES Department(Department_ID) );
+CREATE TABLE Course ( Course_ID INT PRIMARY KEY, Course_Name VARCHAR(100) NOT NULL,
+Credits INT, Faculty_ID INT, CONSTRAINT fk_course_faculty FOREIGN KEY (Faculty_ID)
+REFERENCES Faculty(Faculty_ID) );
+CREATE TABLE Enrollment ( Student_ID INT, Course_ID INT, Enrollment_Date DATE, Grade VARCHAR(5),
+PRIMARY KEY (Student_ID, Course_ID), CONSTRAINT fk_enrollment_student
+FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID), CONSTRAINT fk_enrollment_course
+FOREIGN KEY (Course_ID) REFERENCES Course(Course_ID) );
+INSERT INTO Department VALUES (101, 'Computer Applications'), (102, 'Computer Science'),
+(103, 'Information Technology');
+INSERT INTO Student VALUES (1, 'Anitha', 'anitha@gmail.com', '9876543210', 101), (2, 'Karthik',
+'karthik@gmail.com', '9876543211', 101), (3, 'Priya', 'priya@gmail.com', '9876543212', 102), (4, 'Rahul',
+'rahul@gmail.com', '9876543213', 102);
+INSERT INTO Faculty VALUES (201, 'Dr. Kumar', 'kumar@gmail.com', 101),(202, 'Dr. Meena',
+'meena@gmail.com', 102), (203, 'Dr. Ravi', 'ravi@gmail.com', 103);
+INSERT INTO Course VALUES (301, 'Database Management Systems', 4, 201), (302, 'Web Programming',
+4, 201), (303, 'Data Structures', 3, 202), (304, 'Computer Networks', 4, 202);
+INSERT INTO Enrollment VALUES (1, 301, '2026-08-01', 'A'), (1, 302, '2026-08-02', 'B+'), (2, 301,
+'2026-08-01', 'A+'), (2, 303, '2026-08-03', 'B'), (3, 303, '2026-08-03', 'A'), (3, 304, '2026-08-04', 'A+');
